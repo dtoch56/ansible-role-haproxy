@@ -1,0 +1,18 @@
+galaxy_info:
+  author: dtoch56
+  role_name: haproxy
+  description: HaProxy server
+  license: MIT
+  min_ansible_version: 2.1
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - haproxy
+    - proxy
+
+dependencies: []

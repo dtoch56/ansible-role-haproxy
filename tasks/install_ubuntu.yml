@@ -1,0 +1,17 @@
+- name: Add an Apt signing key to a specific keyring file
+  ansible.builtin.apt:
+    name: software-properties-common
+
+- name: Add specified repository into sources list
+  ansible.builtin.apt_repository:
+    repo: ppa:vbernat/haproxy-2.4
+    filename: haproxy
+    state: present
+  when: ansible_distribution_release == "Bionic" or
+        ansible_distribution_release == "Focal"
+
+- name: Install HaProxy
+  ansible.builtin.apt:
+    name: haproxy={{ haproxy_version }}.\*
+    update_cache: yes
+    state: present

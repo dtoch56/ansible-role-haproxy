@@ -1,0 +1,16 @@
+- name: Add an Apt signing key to a specific keyring file
+  ansible.builtin.apt_key:
+    url: https://haproxy.debian.net/bernat.debian.org.gpg
+    keyring: /usr/share/keyrings/haproxy.debian.net.gpg
+
+- name: Add specified repository into sources list
+  ansible.builtin.apt_repository:
+    repo: deb "[signed-by=/usr/share/keyrings/haproxy.debian.net.gpg]" http://haproxy.debian.net {{ ansible_distribution_release }}-backports-2.4 main
+    filename: haproxy
+    state: present
+
+- name: Install HaProxy
+  apt:
+    name: haproxy={{ haproxy_version }}.\*
+    update_cache: yes
+    state: present

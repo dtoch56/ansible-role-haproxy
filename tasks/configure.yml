@@ -1,0 +1,43 @@
+---
+- name: Create systemd directory for override haproxy value
+  file:
+    state: directory
+    path: /etc/systemd/system/haproxy.service.d
+
+- name: Increase number of openfiles and process limits
+  copy:
+    src: systemd_override.conf
+    dest: /etc/systemd/system/haproxy.service.d/override.conf
+  notify:
+    - reload haproxy
+
+- name: Reload configs systemd
+  systemd: daemon_reload=yes
+
+- name: Create conf dir
+  file:
+    state: directory
+    path: /etc/haproxy/conf.d
+    mode: 0777
+
+- name: Copy defaut haproxy service config
+  copy:
+    src: default_haproxy
+    dest: /etc/default/haproxy
+  notify:
+    - restart haproxy
+
+- name: Copy all certificates
+  copy:
+    content: "{{ item.value }}"
+    dest: "/etc/ssl/private/{{ item.key }}"
+    mode: 0400
+    owner: haproxy
+  with_dict: "{{ haproxy_cert }}"
+  notify:
+    - reload haproxy
+
+- name: Deploying HAProxy config
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg mode=0644
+  notify:
+    - reload haproxy
