@@ -5,12 +5,12 @@
 
 - name: Add specified repository into sources list
   ansible.builtin.apt_repository:
-    repo: deb "[signed-by=/usr/share/keyrings/haproxy.debian.net.gpg]" http://haproxy.debian.net {{ ansible_distribution_release }}-backports-2.4 main
+    repo: "deb [signed-by=/usr/share/keyrings/haproxy.debian.net.gpg] http://haproxy.debian.net {{ ansible_distribution_release }}-backports-2.4 main"
     filename: haproxy
     state: present
 
-- name: Install HaProxy
+- name: "Install HaProxy {{ haproxy_version }}"
   apt:
-    name: haproxy={{ haproxy_version }}.\*
+    name: "haproxy={{ haproxy_version }}.*"
     update_cache: yes
     state: present

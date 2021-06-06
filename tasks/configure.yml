@@ -38,6 +38,9 @@
     - reload haproxy
 
 - name: Deploying HAProxy config
-  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg mode=0644
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: 0644
   notify:
     - reload haproxy
